@@ -32,20 +32,21 @@ library(ggpubr)
                        Spathian = list(read.csv("Spathian.csv",header=TRUE,sep=";", row.names=1),
                                        name="Spathian"))
 
-#### The script here is made of only two functions 
-  #### ORP(data, Nite)
-    #### data is the input dataframe
+#### The script here is made of only one function
+  #### ORP(data, Nite, plot)
+    #### data is the input list
     #### Nite is the number of iterations for the null model
-      #### (usually Nite = 10.000)
-  #### The output is a dataframe gathering (all in count and percentages)
-    #### empiric data
-    #### confidence intervals
-    #### modelled data
-#### The second function is a graphical representation combining
-  #### 1. the ORP with taxa count
-  #### 2. the ORP with taxa percentages
+      #### (default value: Nite = 10.000)
+    #### plot (TRUE/FALSE) is allowing ORP graphical representation
+  #### The output is either 
+    #### if plot=FALSE: a dataframe gathering (in count and percentages)
+      #### empiric data, confidence intervals and modeled data
+    #### if plot=TRUE: a graphical representation combining
+      #### 1. the ORP with taxa count
+      #### 2. the ORP with taxa percentages
 
-ORP <- function(data, Nite){
+#Occurrence Ratio Profile
+ORP <- function(data, Nite=10000, plot=c("TRUE","FALSE")){
   
   #Empiric ORP
   n.sp <- as.numeric(ncol(data[[1]]))
@@ -129,45 +130,41 @@ ORP <- function(data, Nite){
   df.ORP <- cbind (df.perc,
                    CI.count.min, CI.count.max, CI.perc.min, CI.perc.max,
                    lot.count.min, lot.count.max, lot.perc.min, lot.perc.max)
-}
-multi.ORP <- lapply(data.brayard, ORP, Nite=10000)
-
-
-#Graphic representation
-plot.ORP <- function (data){
-  plot.count <- #ORP with taxa count
-    ggplot(data, aes(x=as.numeric(rownames(data)), y=data$hist.perc.counts))+
-    geom_ribbon(aes(ymin=lot.count.min, ymax=lot.count.max),fill="grey90")+
-    geom_errorbar(aes(ymin=CI.count.min, ymax=CI.count.max), width=0) +
-    geom_point()+
-    theme_bw()+
-    theme(#text = element_text(size=20),
-      panel.grid.major.x = element_blank(),
-      panel.grid.minor.x = element_blank(),
-      panel.grid.minor.y = element_blank())+
-    scale_y_continuous(breaks=seq(0,max(data),10),limits=c(0,max(data)))+
-    scale_x_continuous(breaks=seq(0,1,0.1),limits=c(0,1))+
-    labs(x="Occurence ratio", y="Number of taxa", title="My ORP")
   
-  plot.perc <- #ORP with taxa percentages
-    ggplot(data, aes(x=as.numeric(rownames(data)), y=data$hist.perc.perc))+
-    geom_ribbon(aes(ymin=lot.perc.min, ymax=lot.perc.max),fill="grey90")+
-    geom_errorbar(aes(ymin=CI.perc.min, ymax=CI.perc.max), width=0) +
-    geom_point()+
-    theme_bw()+
-    theme(#text = element_text(size=20),
-      panel.grid.major.x = element_blank(),
-      panel.grid.minor.x = element_blank(),
-      panel.grid.minor.y = element_blank())+
-    scale_y_continuous(breaks=seq(0,max(data),10),limits=c(0,max(data)))+
-    scale_x_continuous(breaks=seq(0,1,0.1),limits=c(0,1))+
-    labs(x="Occurence ratio", y="Percentage of taxa", title="")
-  
-  ggpubr::ggarrange(plot.count, plot.perc)
+  #Graphical representations
+  if(plot==TRUE){
+    plot.count <- #ORP with taxa count
+      ggplot(df.ORP, aes(x=as.numeric(rownames(df.ORP)), y=df.ORP$hist.perc.counts))+
+      geom_ribbon(aes(ymin=lot.count.min, ymax=lot.count.max),fill="grey90")+
+      geom_errorbar(aes(ymin=CI.count.min, ymax=CI.count.max), width=0) +
+      geom_point()+
+      theme_bw()+
+      theme(#text = element_text(size=20),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank())+
+      scale_y_continuous(breaks=seq(0,max(df.ORP),10),limits=c(0,max(df.ORP)))+
+      scale_x_continuous(breaks=seq(0,1,0.1),limits=c(0,1))+
+      labs(x="Occurence ratio", y="Number of taxa", title=data[[2]])
+    
+    plot.perc <- #ORP with taxa percentages
+      ggplot(df.ORP, aes(x=as.numeric(rownames(df.ORP)), y=df.ORP$hist.perc.perc))+
+      geom_ribbon(aes(ymin=lot.perc.min, ymax=lot.perc.max),fill="grey90")+
+      geom_errorbar(aes(ymin=CI.perc.min, ymax=CI.perc.max), width=0) +
+      geom_point()+
+      theme_bw()+
+      theme(#text = element_text(size=20),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank())+
+      scale_y_continuous(breaks=seq(0,max(df.ORP),10),limits=c(0,max(df.ORP)))+
+      scale_x_continuous(breaks=seq(0,1,0.1),limits=c(0,1))+
+      labs(x="Occurence ratio", y="Percentage of taxa", title=data[[2]])
+    
+    ggpubr::ggarrange(plot.count, plot.perc)
+  }
+  else{return(df.ORP)}
 }
-lapply(multi.ORP,plot.ORP)
 
-
-
-plot.ORP <- ggpubr::ggarrange(plotlist=multi.ORP,ncol=1,nrow=length(data.brayard))
-plot.ORP
+multi.ORP <- lapply(data.brayard, ORP, plot=TRUE)
+ggpubr::ggarrange(plotlist = multi.ORP, ncol=1)#if you want to display the graphics
