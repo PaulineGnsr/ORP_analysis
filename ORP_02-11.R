@@ -16,7 +16,7 @@
 
 #### Welcome and thank you for using the ORP!
 ##set working directory
-setwd("C:/Users/33677/Documents/NEW_WORK/Postdoc LYON/ORP R")
+setwd("C:/Users/33677/Documents/NEW_WORK/Postdoc LYON/ORP R/Brayard et al. (2006)")
 library(graphics)
 library(dplyr)
 library(tidyr)
