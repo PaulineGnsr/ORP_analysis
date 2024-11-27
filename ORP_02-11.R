@@ -1,8 +1,17 @@
 ##########################################################################
 ####                     OCCURRENCE RATIO PROFILE                     ####
-####                Analysis based on Brayard et al 2006              ####
+####                                                                  ####
+####              Analysis based on Brayard et al. (2006)             ####
 ####      in Palaeogeography, Palaeoclimatology, Palaeoecology        ####
 ####          (https://doi.org/10.1016/j.palaeo.2006.02.003)          ####
+####                                                                  ####
+####                and developped and first used in R                ####
+####                in Guenser et al (2025) in Lethaia                ####
+####                            [INSERT DOI]                          ####
+####                                                                  ####
+####              PLEASE CITE BOTH BRAYARD ET AL. (2006)              ####
+####                    AND GUENSER ET AL. (2025)                     ####
+####          WHEN YOU USE THIS FUNCTION IN YOUR PUBLICATION          ####
 ##########################################################################
 
 #### Welcome and thank you for using the ORP!
