@@ -2,7 +2,7 @@
 This is the README file for the ORP (Occurrence Ratio Profile) analysis.
 
 ORP_02-11.R is the script to run.
-The CSV files (Griesbachian, Dienerian, Smithian and Spathian) are incidence matrices from Brayard et al. 2006 (Palaeogeography, Palaeoclimatology, Palaeoecology). They are used as examples to reproduce Brayard et al's results
+The folder "Brayard et al. (2006)" has the incidence matrices of Early Triassic ammonoids from the publication. The CSV files (Griesbachian, Dienerian, Smithian and Spathian) are used as examples to reproduce Brayard et al's results. You can also download the incidence matrices from Guenser et al. (2025) to reproduce their ORPs in conodonts and ammonoids.
 
 DISCLAIMERS:
  - You need to set your own working directory to run the code.
